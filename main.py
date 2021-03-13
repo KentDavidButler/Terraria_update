@@ -9,6 +9,7 @@ It will check if the Terraria server is running ever five mins.
 from datetime import datetime
 import time
 import logging
+import asyncio
 
 import Terraria_Website as site
 import Local_Server as serv
@@ -72,6 +73,7 @@ if __name__ == "__main__":
         else:
             logging.debug('The Server is running: %s', server_subprocess)
 
-        logging.debug(serv.get_server_log(server_subprocess))
+        # server_log = asyncio.run(serv.get_server_log(server_subprocess))
+        # logging.debug(server_log)
         time.sleep(sleep_timer)
         logging.debug('Looping back over script')

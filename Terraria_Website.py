@@ -38,7 +38,7 @@ class TerrariaWebsite:
         return req
 
     def _get_website(self):
-        driver = webdriver.webdriver.Chrome()
+        driver = webdriver.Chrome()
         driver.get(self.url)
         html = driver.page_source
         driver.quit()

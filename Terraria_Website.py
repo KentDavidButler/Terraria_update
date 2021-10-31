@@ -38,10 +38,12 @@ class TerrariaWebsite:
         return req
 
     def _get_website(self):
-        # user agent is needed, request fails without it
-        with urlopen(self._request_headers()) as u:
-            site = u.read().decode()
-        yield site
+        driver = webdriver.webdriver.Chrome()
+        driver.get(self.url)
+        html = driver.page_source
+        driver.quit()
+
+        return html
 
     def _find_a_href(self):
         a_href = None
@@ -63,6 +65,7 @@ class TerrariaWebsite:
 
     @staticmethod
     def driver_test():
+        """ Selenium example"""
         driver = webdriver.Chrome('/path/to/chromedriver')  # Optional argument, if not specified will search path.
         driver.get('http://www.google.com/');
         time.sleep(5)  # Let the user actually see something!

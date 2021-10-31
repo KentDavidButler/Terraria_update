@@ -51,7 +51,10 @@ class TerrariaWebsite:
         a_tags = find_by_class.find_all('a')
         a_tags_list = str(a_tags).split(',')
 
+        count = 0
         for a_tag in a_tags_list:
+            count = count + 1
+            print(f"{count}: {a_tag}")
             if re.findall(r'terraria-server-\d{4}', a_tag):
                 a_href = a_tag
                 break

@@ -13,8 +13,8 @@ import subprocess
 import wmi
 import zipfile
 
-path = "C:\\Terraria_update"
-server_path = "C:\\Program Files\\Terraria"
+path = r"C:\Terraria_update"
+server_path = r"C:\Program Files\Terraria"
 
 
 def get_immediate_subdirectories(a_dir):

@@ -28,6 +28,7 @@ if __name__ == "__main__":
     logging.basicConfig(format=("%(asctime)s --- %(levelname)s --- %(message)s"),
                         datefmt=("%Y-%m-%d %H:%M:%S"),
                         level=logging.DEBUG)
+    Ter_Website = Terraria_Website()
 
     local_version = serv.get_latest_installed_version()
     site_version = site.get_version()
@@ -40,24 +41,30 @@ if __name__ == "__main__":
     while True:
 
         now = datetime.now()
-        if now > check_site_for_update_low and now < check_site_for_update_high: 
-            "Checking Site Version - Should occure Once between 2am and 2:05am Eastern"
-            logging.debug('Checking Site Version')
-            site_version = site.get_version()
-            site_version = int(site_version[-4:])
-            logging.debug('The Site Version of Terraria is %s', site_version)
+        if now > check_site_for_update_low and now < check_site_for_update_high:
+            try:
+                "Checking Site Version - Should occur Once between 2am and 2:05am Eastern"
+                logging.debug('Checking Site Version')
+                site_version = site.get_version()
+                site_version = int(site_version[-4:])
+                logging.debug('The Site Version of Terraria is %s', site_version)
 
-            logging.debug('Checking Local Version')
-            local_version = serv.get_latest_installed_version()
-            logging.debug('The Local Version of Terraria is %s', local_version)
+                logging.debug('Checking Local Version')
+                local_version = serv.get_latest_installed_version()
+                logging.debug('The Local Version of Terraria is %s', local_version)
+            except Exception as e:
+                logging.debug(f'Exception has been thrown during Checking version: {e}')
 
         if site_version > local_version:
             "download and install latest version"
             logging.debug('Site Version is higher than local version')
             logging.debug('Updating Local Version of Terraria')
 
-            site.download_latest_version()
-            serv.extract_zip()
+            try:
+                site.download_latest_version()
+                serv.extract_zip()
+            except Exception as e:
+                logging.debug(f'Exception has been during download process: {e}')
 
             if serv.is_server_running():
                 logging.debug('Saving and stopping Server')
@@ -66,12 +73,15 @@ if __name__ == "__main__":
             local_version = serv.get_latest_installed_version()
 
         "time to check if local server is running"
-        logging.debug('Checking to see if the server is running')
-        if serv.is_server_running() is False:
-            logging.debug('Starting the local server: %s', server_subprocess)
-            server_subprocess = serv.start_ter_serv(local_version)
-        else:
-            logging.debug('The Server is running: %s', server_subprocess)
+        try:
+            logging.debug('Checking to see if the server is running')
+            if serv.is_server_running() is False:
+                logging.debug('Starting the local server: %s', server_subprocess)
+                server_subprocess = serv.start_ter_serv(local_version)
+            else:
+                logging.debug('The Server is running: %s', server_subprocess)
+        except Exception as e:
+            logging.debug(f'Exception has been thrown while checking to see if server is running: {e}')
 
         # server_log = asyncio.run(serv.get_server_log(server_subprocess))
         # logging.debug(server_log)

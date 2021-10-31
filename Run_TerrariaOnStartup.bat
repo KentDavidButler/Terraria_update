@@ -1,0 +1,1 @@
+py C:\Terraria_update\main.py

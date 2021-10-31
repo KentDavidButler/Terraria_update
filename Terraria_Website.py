@@ -13,11 +13,14 @@ from selenium import webdriver
 
 class TerrariaWebsite:
     def __init__(self):
-        self.url = 'http://terraria.org/#/'
+        self.url = 'https://terraria.fandom.com/wiki/Server'
         self._siteVersion = ''
         self.site_version()
 
     def site_version(self):
+        if (self._siteVersion == '') or (self._siteVersion is None):
+            self.set_version()
+
         return self._siteVersion
 
     def set_version(self):
@@ -44,9 +47,9 @@ class TerrariaWebsite:
         a_href = None
         site_info = self._get_website()
         soup = BeautifulSoup(site_info, 'html.parser')
-        get_footer = soup.find(class_="page-footer")
-        a_tags_in_footer = get_footer.find_all('a')
-        a_tags_list = str(a_tags_in_footer).split(',')
+        find_by_class = soup.find(class_="external text")
+        a_tags = find_by_class.find_all('a')
+        a_tags_list = str(a_tags).split(',')
 
         for a_tag in a_tags_list:
             if re.findall(r'terraria-server-\d{4}', a_tag):
@@ -60,7 +63,7 @@ class TerrariaWebsite:
         driver = webdriver.Chrome('/path/to/chromedriver')  # Optional argument, if not specified will search path.
         driver.get('http://www.google.com/');
         time.sleep(5)  # Let the user actually see something!
-        search_box = driver.find_element_by_name('q')
+        search_box = driver.find_element('q')
         search_box.send_keys('ChromeDriver')
         search_box.submit()
         time.sleep(5)  # Let the user actually see something!
@@ -73,9 +76,9 @@ class TerrariaWebsite:
         download_link = a_href[start_of_link:end_of_link]
 
         full_url = self.url + download_link
-        version = get_version()
+        version = self.site_version()
 
-        with urlopen(request_headers(full_url)) as u:
+        with urlopen(self._request_headers(full_url)) as u:
             data = u.read()
 
         with open(version+'.zip', 'wb') as zip_file:

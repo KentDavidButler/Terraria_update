@@ -11,7 +11,7 @@ import time
 import logging
 import asyncio
 
-import Terraria_Website as site
+from Terraria_Website import TerrariaWebsite as site
 import Local_Server as serv
 
 # check site for updates at 2AM everyday
@@ -22,16 +22,16 @@ check_site_for_update_high = now.replace(hour=2, minute=5, second=0, microsecond
 
 # sleep timer used to delay looping through code
 sleep_timer = 60
-server_subprocess = "na"
+server_subprocess = None
+ter_site = site()
 
 if __name__ == "__main__":
     logging.basicConfig(format=("%(asctime)s --- %(levelname)s --- %(message)s"),
                         datefmt=("%Y-%m-%d %H:%M:%S"),
                         level=logging.DEBUG)
-    Ter_Website = Terraria_Website()
 
     local_version = serv.get_latest_installed_version()
-    site_version = site.get_version()
+    site_version = ter_site.site_version()
     site_version = int(site_version[-4:])
 
     logging.debug('Python Script is starting')
@@ -41,11 +41,11 @@ if __name__ == "__main__":
     while True:
 
         now = datetime.now()
-        if now > check_site_for_update_low and now < check_site_for_update_high:
+        if (now > check_site_for_update_low) and (now < check_site_for_update_high):
             try:
                 "Checking Site Version - Should occur Once between 2am and 2:05am Eastern"
                 logging.debug('Checking Site Version')
-                site_version = site.get_version()
+                site_version = ter_site.get_version()
                 site_version = int(site_version[-4:])
                 logging.debug('The Site Version of Terraria is %s', site_version)
 
@@ -61,7 +61,7 @@ if __name__ == "__main__":
             logging.debug('Updating Local Version of Terraria')
 
             try:
-                site.download_latest_version()
+                ter_site.download_latest_version()
                 serv.extract_zip()
             except Exception as e:
                 logging.debug(f'Exception has been during download process: {e}')

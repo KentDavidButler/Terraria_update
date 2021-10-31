@@ -45,10 +45,16 @@ def is_server_running():
     process running called TerrariaServer.exe
     """
     c = wmi.WMI()
+    process_name_list = []
 
     for process in c.Win32_Process():
-        if process.Name == "TerrariaServer.exe":
-            return True
+        process_name_list.append(process.Name)
+
+    # Terraria should be running and everything should be perfecto!
+    if "TerrariaServer.exe" in process_name_list:
+        return True
+
+    # Terraria is NOT running! DANGER DANGER!
     return False
 
 

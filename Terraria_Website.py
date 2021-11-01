@@ -39,6 +39,7 @@ class TerrariaWebsite:
         return req
 
     def _get_website(self):
+        # Note to self: Keep Webdriver on the same version as Chrome
         driver = Chrome("G:\\KAdmin\\Pycharm\\Terraria_update\\chromedriver.exe")
         driver.get(self.url)
         time.sleep(5)
@@ -50,10 +51,13 @@ class TerrariaWebsite:
     def _find_a_href(self):
         a_href = None
         site_info = self._get_website()
-        soup = BeautifulSoup(site_info, 'html.parser')
-        find_by_class = soup.find(class_="external text")
-        a_tags = find_by_class.find_all('a')
-        a_tags_list = str(a_tags).split(',')
+        soup = BeautifulSoup(site_info)
+        find_a_tags_by_class = soup.find_all("a", {"class": "external text"})
+        print(find_a_tags_by_class)
+        print("****")
+        a_tags_list = str(find_a_tags_by_class).split(',')
+        print(a_tags_list)
+        print("*****")
 
         count = 0
         for a_tag in a_tags_list:
@@ -63,19 +67,9 @@ class TerrariaWebsite:
                 a_href = a_tag
                 break
 
+        print(a_href)
+        print("******")
         return a_href
-
-    # @staticmethod
-    # def driver_test():
-    #     """ Selenium example"""
-    #     driver = webdriver.Chrome('/path/to/chromedriver')  # Optional argument, if not specified will search path.
-    #     driver.get('http://www.google.com/');
-    #     time.sleep(5)  # Let the user actually see something!
-    #     search_box = driver.find_element('q')
-    #     search_box.send_keys('ChromeDriver')
-    #     search_box.submit()
-    #     time.sleep(5)  # Let the user actually see something!
-    #     driver.quit()
 
     def download_latest_version(self):
         a_href = self._find_a_href()

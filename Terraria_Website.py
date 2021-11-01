@@ -9,6 +9,7 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 import time
 from selenium import webdriver
+from selenium.webdriver import Chrome
 
 
 class TerrariaWebsite:
@@ -38,8 +39,9 @@ class TerrariaWebsite:
         return req
 
     def _get_website(self):
-        driver = webdriver.Chrome()
+        driver = Chrome("G:\\KAdmin\\Pycharm\\Terraria_update\\chromedriver.exe")
         driver.get(self.url)
+        time.sleep(5)
         html = driver.page_source
         driver.quit()
 
@@ -63,17 +65,17 @@ class TerrariaWebsite:
 
         return a_href
 
-    @staticmethod
-    def driver_test():
-        """ Selenium example"""
-        driver = webdriver.Chrome('/path/to/chromedriver')  # Optional argument, if not specified will search path.
-        driver.get('http://www.google.com/');
-        time.sleep(5)  # Let the user actually see something!
-        search_box = driver.find_element('q')
-        search_box.send_keys('ChromeDriver')
-        search_box.submit()
-        time.sleep(5)  # Let the user actually see something!
-        driver.quit()
+    # @staticmethod
+    # def driver_test():
+    #     """ Selenium example"""
+    #     driver = webdriver.Chrome('/path/to/chromedriver')  # Optional argument, if not specified will search path.
+    #     driver.get('http://www.google.com/');
+    #     time.sleep(5)  # Let the user actually see something!
+    #     search_box = driver.find_element('q')
+    #     search_box.send_keys('ChromeDriver')
+    #     search_box.submit()
+    #     time.sleep(5)  # Let the user actually see something!
+    #     driver.quit()
 
     def download_latest_version(self):
         a_href = self._find_a_href()

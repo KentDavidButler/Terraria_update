@@ -50,7 +50,7 @@ class TerrariaWebsite:
     def _find_a_href(self):
         a_href = None
         site_info = self._get_website()
-        soup = BeautifulSoup(site_info)
+        soup = BeautifulSoup(site_info, html.parser)
 
         find_a_tags_by_class = soup.find_all("a", {"class": "external text"})
         a_tags_list = str(find_a_tags_by_class).split(',')
